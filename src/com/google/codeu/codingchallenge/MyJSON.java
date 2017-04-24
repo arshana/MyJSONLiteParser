@@ -38,7 +38,7 @@ final class MyJSON extends HashMap implements JSON {
 			Set<String> allKeys = temp.keySet();
 			for(String key : allKeys){
 				if(temp.get(key) instanceof JSON){
-					JSON check = ((MyJSON) temp.get(key)).getObject(name);
+					JSON check = temp.getObject(key).getObject(name);
 					if(check != null){
 						return check;
 					}
@@ -92,7 +92,7 @@ final class MyJSON extends HashMap implements JSON {
 			Set<String> allKeys = temp.keySet();
 			for(String key : allKeys){
 				if(temp.get(key) instanceof JSON){
-					String check = ((MyJSON) temp.get(key)).getString(name);
+					String check = temp.getObject(key).getString(name);
 					if(check != null){
 						return check;
 					}
@@ -139,16 +139,32 @@ final class MyJSON extends HashMap implements JSON {
 		if(!temp.isEmpty()){
 			Set<String> allKeys = temp.keySet();
 			for(String key : allKeys){
-				if(temp.getObject(key) != null){
+				if(temp.get(key) instanceof JSON){
 					names.add(key);
-					//temp.getObject(key)
+					temp.getObject(key).getObjects(names);
 				}
 			}
 		}
 	}
 
 	@Override
+	//wants keys, NOT values
 	public void getStrings(Collection<String> names) {
 		// TODO: implement this
+		getStrings(names, this);
+	}
+	
+	private void getStrings(Collection<String> names, MyJSON temp){
+		if(!temp.isEmpty()){
+			Set<String> allKeys = temp.keySet();
+			for(String key : allKeys){
+				if(temp.get(key) instanceof String){
+					names.add(key);
+				}
+				else{
+					temp.getObject(key).getStrings(names);
+				}
+			}
+		}
 	}
 }

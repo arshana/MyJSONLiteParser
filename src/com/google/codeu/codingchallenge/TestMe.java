@@ -1,5 +1,7 @@
 package com.google.codeu.codingchallenge;
 
+import java.util.ArrayList;
+
 public class TestMe {
 	public static void main(String[] args){
 		MyJSON name = new MyJSON();
@@ -102,5 +104,19 @@ public class TestMe {
 		name.setObject("second", third);
 		System.out.println(name);
 		System.out.println();
+		
+		System.out.println("/////////////////////////////////Test getObjects()////////////////////////////////////\n");
+		
+		ArrayList<String> objects = new ArrayList<String>();
+		name.getObjects(objects);
+		
+		System.out.println(objects);
+		
+		System.out.println("/////////////////////////////////Test getStrings()////////////////////////////////////\n");
+		
+		ArrayList<String> strings = new ArrayList<String>();
+		name.getStrings(strings);
+		
+		System.out.println(strings);
 	}
 }
