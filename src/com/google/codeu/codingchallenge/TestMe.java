@@ -135,7 +135,7 @@ public class TestMe {
 		in = in.replaceAll("\\\"", "\\\\\\\"");
 		System.out.println(in);
 		
-		in = in.replace("\\\\", "\\");
+		
 		in = in.replace("\\b", "\b");
 		in = in.replace("\\t", "\t");
 		in = in.replace("\\n", "\n");
@@ -143,6 +143,7 @@ public class TestMe {
 		in = in.replace("\\r", "\r");
 		in = in.replace("\\'", "\'");
 		in = in.replaceAll("\\\\\\\"", "\\\"");
+		in = in.replace("\\\\", "\\");
 		System.out.println(in);
 	}
 }

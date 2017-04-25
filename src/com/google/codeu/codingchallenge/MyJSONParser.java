@@ -47,14 +47,17 @@ final class MyJSONParser implements JSONParser {
 			throw new IOException();
 		}
 		in = in.substring(1, in.length() - 1).trim();
+		if(in.length() == 0){
+			return new MyJSON();
+		}
 		//Ideally, I would find a better way to split in since the key, itself, could contain the string I'm splitting at.
 		//If I have more time, I'll try to figure out a better way to handle this.
 		String[] splitObject = in.split("\\\"\\s*:\\s*", 2);
 		if(splitObject.length != 2){
 			throw new IOException();
 		}
-		String key = parseString(splitObject[0]);
-		Object val = parseValue(splitObject[1] + "\\\"");
+		String key = parseString(splitObject[0] + "\\\"");
+		Object val = parseValue(splitObject[1]);
 		MyJSON temp = new MyJSON();
 		if(val instanceof JSON){
 			temp.setObject(key, (JSON) val);
@@ -76,7 +79,7 @@ final class MyJSONParser implements JSONParser {
 		if(!matcher.matches()){
 			throw new IOException();
 		}
-		in = in.replace("\\\\", "\\");
+		
 		in = in.replace("\\b", "\b");
 		in = in.replace("\\t", "\t");
 		in = in.replace("\\n", "\n");
@@ -84,7 +87,8 @@ final class MyJSONParser implements JSONParser {
 		in = in.replace("\\r", "\r");
 		in = in.replace("\\'", "\'");
 		in = in.replaceAll("\\\\\\\"", "\\\"");
-		return in.substring(2, in.length() - 2);
+		in = in.replace("\\\\", "\\");
+		return in.substring(1, in.length() - 2);
 	}
 	
 	//can either direct to parseObject of parseStringValue
@@ -103,18 +107,19 @@ final class MyJSONParser implements JSONParser {
 			in = in.replace("\\r", "\r");
 			in = in.replace("\\'", "\'");
 			in = in.replaceAll("\\\\\\\"", "\\\"");
-			return in.substring(2, in.length() - 2);
+			return in.substring(1, in.length() - 1);
 		}
 		
 		else if(in.startsWith("{") && in.endsWith("}")){
 			//now check if there are multiple key-value pairs
-			String[] pairs = in.split("\\s*,\\s*\\\"");
+			String[] pairs = in.split("\\s*,\\s*\\\\\\\"");
 			if(pairs.length > 1){
 				//remove curly braces
 				pairs[0] = pairs[0].substring(1);
 				pairs[pairs.length - 1] = pairs[pairs.length - 1].substring(0, pairs[pairs.length - 1].length() - 1);
 				
-				ArrayList<JSON> objPairs = new ArrayList<JSON>();
+				MyJSON temp = new MyJSON();
+
 				for(int i = 0; i < pairs.length; i++){
 					if(!pairs[i].contains(":")){
 						throw new IOException();
@@ -130,7 +135,8 @@ final class MyJSONParser implements JSONParser {
 					}
 					String key = parseString(splitObject[0] + "\\\"");
 					Object val = parseValue(splitObject[1]);
-					MyJSON temp = new MyJSON();
+
+					
 					if(val instanceof JSON){
 						temp.setObject(key, (JSON) val);
 					}
@@ -140,9 +146,8 @@ final class MyJSONParser implements JSONParser {
 					else{
 						throw new IOException();
 					}
-					objPairs.add(temp);
 				}
-				return objPairs;
+				return temp;
 			}
 			else{
 				return parseObject(in);
