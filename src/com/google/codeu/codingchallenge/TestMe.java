@@ -118,5 +118,31 @@ public class TestMe {
 		name.getStrings(strings);
 		
 		System.out.println(strings);
+		
+		System.out.println("/////////////////////////////////Test regex////////////////////////////////////\n");
+		System.out.println("\\\"f\\\\i\\n\\r\\t\\\"s\\'t\\\"");
+		
+		String in = "\"f\\i\n\r\t\"s\'t\"";
+		System.out.println(in);
+		// \b \t \n \f \r \" \' \\
+		in = in.replace("\\", "\\\\");
+		in = in.replace("\b", "\\b");
+		in = in.replace("\t", "\\t");
+		in = in.replace("\n", "\\n");
+		in = in.replace("\f", "\\f");
+		in = in.replace("\r", "\\r");
+		in = in.replace("\'", "\\'");
+		in = in.replaceAll("\\\"", "\\\\\\\"");
+		System.out.println(in);
+		
+		in = in.replace("\\\\", "\\");
+		in = in.replace("\\b", "\b");
+		in = in.replace("\\t", "\t");
+		in = in.replace("\\n", "\n");
+		in = in.replace("\\f", "\f");
+		in = in.replace("\\r", "\r");
+		in = in.replace("\\'", "\'");
+		in = in.replaceAll("\\\\\\\"", "\\\"");
+		System.out.println(in);
 	}
 }
